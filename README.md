@@ -1,8 +1,8 @@
-# UniGasLogger (Unity Google Apps Script Logger)
+# UniGasLogger
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**UniGasLogger** は、UnityとGoogle Apps Script (GAS) 間で**非同期通信**を行うためのライブラリです。ゲームのログ収集、スコアランキングシステム構築を簡単に行うために設計されています。
+**UniGasLogger (Unity Google Apps Script Logger)** は、UnityとGoogle Apps Script (GAS) 間で**非同期通信**を行うためのライブラリです。ゲームのログ収集、スコアランキングシステム構築を簡単に行うために設計されています。
 
 ## 🚀 特徴 (Features)
 
