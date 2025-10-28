@@ -24,7 +24,7 @@ function doPost(e) {
     let targetSheet = null;
 
     // 1: 指定された名前のシートを指定
-    if (sheetName != null){
+    if (sheetName != null && sheetName != ""){
       targetSheet = spreadsheet.getSheetByName(sheetName);
 
       // 1a: 存在しなければ作成
