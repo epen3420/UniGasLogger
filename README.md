@@ -18,10 +18,8 @@
 Unityエディタの `Window > Package Manager` を開き、左上の「+」ボタンから `Add package from git URL...` を選択し、本リポジトリのURLを入力してください。
 
 ```
-https://github.com/epen3420/UniGasLogger.git?path=/Unity
+https://github.com/epen3420/UniGasLogger.git?path=/Unity/UniGasLogger
 ```
-
-*(注: UPMでサブディレクトリを指定するには `?path=/Unity` が必要です)*
 
 -----
 
@@ -66,8 +64,8 @@ https://github.com/epen3420/UniGasLogger.git?path=/Unity
 
 ```gitignore
 # UniGasLogger Settings
-/Assets/UniGasLogger/Settings/GasSettings.asset
-/Assets/UniGasLogger/Settings/GasSettings.asset.meta
+/Assets/Pluging/UniGasLogger/Resources/GasSettings.asset
+/Assets/Plugins/UniGasLogger/Resources/GasSettings.asset.meta
 ```
 
 ## 📖 使い方 (Usage)
