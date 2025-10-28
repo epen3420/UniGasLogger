@@ -1,10 +1,7 @@
 {
-    "name": "UniGasClient.Runtime",
-    "rootNamespace": "UniGasClient",
-    "references": [
-        "UniGasClient.Core",
-        "UniGasLogger.Data"
-    ],
+    "name": "UniGasLogger.Data",
+    "rootNamespace": "UniGasLogger",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

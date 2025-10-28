@@ -2,7 +2,8 @@
     "name": "UniGasClient.Editor",
     "rootNamespace": "UniGasClient",
     "references": [
-        "GUID:c69a4df24e3418e41b6f912757781565"
+        "GUID:c69a4df24e3418e41b6f912757781565",
+        "GUID:2ffdda4604d794c4f9c826e418acf17f"
     ],
     "includePlatforms": [
         "Editor"
