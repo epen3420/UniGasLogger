@@ -24,7 +24,7 @@ namespace UniGasLogger
             }
 
 
-            var gasSettings = GasSettingsService.LoadSettings();
+            var gasSettings = Resources.Load<GasSettings>("GasSettings");
             var httpClient = new GasHttpClient(gasSettings);
 
             loggerService = new GasLoggerService(httpClient);

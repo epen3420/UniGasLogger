@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
-using System.IO;
+using UniGasLogger.Data;
 
-namespace UniGasLogger.Data
+namespace UniGasLogger.Editor
 {
     internal static class GasSettingsService
     {
@@ -11,18 +11,6 @@ namespace UniGasLogger.Data
         private const string BaseDirPath = "Assets/Plugins/UniGasLogger";
         private const string FinalResourcesPath = BaseDirPath + "/" + ResourcesDirName;
         private const string FinalAssetPath = FinalResourcesPath + "/" + AssetName;
-
-
-        /// <summary>
-        /// Resourcesフォルダから設定ファイルをロードします。
-        /// </summary>
-        /// <returns>見つかったGasSettings、または null</returns>
-        public static GasSettings LoadSettings()
-        {
-            GasSettings settings = Resources.Load<GasSettings>("GasSettings");
-
-            return settings;
-        }
 
 
         /// <summary>
