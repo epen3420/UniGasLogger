@@ -2,7 +2,7 @@
     "name": "UniGasClient.Core",
     "rootNamespace": "UniGasClient",
     "references": [
-        "GUID:2ffdda4604d794c4f9c826e418acf17f"
+        "GUID:9f5453858313ccc4f8e5793c65160c36"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
