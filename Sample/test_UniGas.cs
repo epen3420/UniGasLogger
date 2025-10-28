@@ -4,20 +4,43 @@ using UnityEngine;
 
 public class test_UniGas : MonoBehaviour
 {
-    private GasServiceManager gasServiceManager;
-
     private void Start()
     {
-        gasServiceManager = GasServiceManager.Instance;
+        OnGameStart();
 
-        SendTestLog();
+        OnGameEnd(100);
     }
 
-    private void SendTestLog()
+    [System.Serializable]
+    public class PlayLog
     {
-        var logDict = new Dictionary<string, object>();
-        logDict.Add("name", "hoge");
-        logDict.Add("score", 123456);
-        var _ = gasServiceManager.SendLog(logDict, "Ranking");
+        public string PlayerName { get; set; }
+        public int Score { get; set; }
+        public bool IsClear { get; set; }
+    }
+
+    public async void OnGameEnd(int finalScore)
+    {
+        var log = new PlayLog
+        {
+            PlayerName = "Hero_Alpha",
+            Score = finalScore,
+            IsClear = true
+        };
+
+        // GASへ送信。GAS側で "Stage1Clear" というシート名として扱われます。
+        await GasServiceManager.Instance.SendLog(log, "Stage1Clear");
+    }
+
+    // Dictionary を送信する例
+    public async void OnGameStart()
+    {
+        var log = new Dictionary<string, object>
+        {
+            { "Event", "GameStart" },
+            { "SceneName", "Level_01" }
+        };
+
+        await GasServiceManager.Instance.SendLog(log, "EventLog");
     }
 }
