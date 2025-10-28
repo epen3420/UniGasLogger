@@ -22,21 +22,19 @@ namespace UniGasLogger
             {
                 Destroy(this.gameObject);
             }
-        }
 
 
-        private GasLoggerService loggerService;
-        private RankingClientService rankingService;
-
-
-        private void Start()
-        {
             var gasSettings = GasSettingsService.LoadSettings();
             var httpClient = new GasHttpClient(gasSettings);
 
             loggerService = new GasLoggerService(httpClient);
             rankingService = new RankingClientService(httpClient);
         }
+
+
+        private GasLoggerService loggerService;
+        private RankingClientService rankingService;
+
 
         public async Task SendLog<T>(T datas, string sheetName = null)
         {
