@@ -8,7 +8,7 @@ namespace UniGasLogger.Data
     {
         private const string AssetName = "GasSettings.asset";
         private const string ResourcesDirName = "Resources";
-        private const string BaseDirPath = "Assets/Plugins";
+        private const string BaseDirPath = "Assets/Plugins/UniGasLogger";
         private const string FinalResourcesPath = BaseDirPath + "/" + ResourcesDirName;
         private const string FinalAssetPath = FinalResourcesPath + "/" + AssetName;
 
