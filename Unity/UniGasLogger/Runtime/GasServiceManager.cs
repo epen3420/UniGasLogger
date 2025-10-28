@@ -36,7 +36,7 @@ namespace UniGasLogger
         private RankingClientService rankingService;
 
 
-        public async Task SendLog<T>(T datas, string sheetName)
+        public async Task SendLog<T>(T datas, string sheetName = null)
         {
             if (datas == null)
             {
@@ -47,7 +47,7 @@ namespace UniGasLogger
             await loggerService.SendLog(datas, sheetName);
         }
 
-        public async Task SendLog(Dictionary<string, object> datas, string sheetName)
+        public async Task SendLog(Dictionary<string, object> datas, string sheetName = null)
         {
             if (datas == null)
             {
@@ -58,12 +58,12 @@ namespace UniGasLogger
             await loggerService.SendLog(datas, sheetName);
         }
 
-        public async Task<RankingResponse> GetTopNRanking(int n, string sheetName)
+        public async Task<RankingResponse> GetTopNRanking(int n, string sheetName = null)
         {
             return await rankingService.GetTopNRanking(n, sheetName);
         }
 
-        public async Task<ScoreRankResponse> GetScoreRanking(BigInteger score, string sheetName)
+        public async Task<ScoreRankResponse> GetScoreRanking(BigInteger score, string sheetName = null)
         {
             return await rankingService.GetScoreRank(score, sheetName);
         }
