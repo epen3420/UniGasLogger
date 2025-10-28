@@ -21,6 +21,16 @@ namespace UniGasLogger.Service
         /// </summary>
         public async Task<RankingResponse> GetTopNRanking(int n, string sheetName)
         {
+            if (n < 1)
+            {
+                throw new System.ArgumentNullException(nameof(n), "can not get top n ranking. Because top count is null.");
+            }
+
+            if (sheetName == null)
+            {
+                throw new System.ArgumentNullException(nameof(sheetName), "can not get top n ranking. Because sheetName is null");
+            }
+
             var queryParams = new Dictionary<string, string>
             {
                 {"sheetName", sheetName},
@@ -36,6 +46,11 @@ namespace UniGasLogger.Service
         /// <param name="score">問い合わせたいスコア</param>
         public async Task<ScoreRankResponse> GetScoreRank(BigInteger score, string sheetName)
         {
+            if (sheetName == null)
+            {
+                throw new System.ArgumentNullException(nameof(sheetName), "can not get top n ranking. Because sheetName is null");
+            }
+
             var queryParams = new Dictionary<string, string>
             {
                 {"score", score.ToString()},

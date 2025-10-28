@@ -36,22 +36,34 @@ namespace UniGasLogger
         private RankingClientService rankingService;
 
 
-        public async Task SendLog<T>(T datas, string sheetName = null)
+        public async Task SendLog<T>(T datas, string sheetName)
         {
+            if (datas == null)
+            {
+                Debug.LogError("datas is null. so can not send log.");
+                return;
+            }
+
             await loggerService.SendLog(datas, sheetName);
         }
 
-        public async Task SendLog(Dictionary<string, object> datas, string sheetName = null)
+        public async Task SendLog(Dictionary<string, object> datas, string sheetName)
         {
+            if (datas == null)
+            {
+                Debug.LogError("datas is null. so can not send log.");
+                return;
+            }
+
             await loggerService.SendLog(datas, sheetName);
         }
 
-        public async Task<RankingResponse> GetTopNRanking(int n = 5, string sheetName = null)
+        public async Task<RankingResponse> GetTopNRanking(int n, string sheetName)
         {
             return await rankingService.GetTopNRanking(n, sheetName);
         }
 
-        public async Task<ScoreRankResponse> GetScoreRanking(BigInteger score, string sheetName = null)
+        public async Task<ScoreRankResponse> GetScoreRanking(BigInteger score, string sheetName)
         {
             return await rankingService.GetScoreRank(score, sheetName);
         }

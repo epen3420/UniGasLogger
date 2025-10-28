@@ -21,8 +21,12 @@ namespace UniGasLogger.Service
         {
             if (data == null)
             {
-                Debug.LogError("Can't send log. Because data is null");
-                return;
+                throw new System.ArgumentNullException(nameof(data), "can not send log. because data is null.");
+            }
+
+            if (sheetName == null)
+            {
+                throw new System.ArgumentNullException(nameof(sheetName), "can not send log. because sheetName is null.");
             }
 
             // **修正**: GetPropertiesを使って、インスタンスのpublicプロパティのみを取得
@@ -30,8 +34,7 @@ namespace UniGasLogger.Service
 
             if (dataProperties.Length == 0)
             {
-                Debug.LogWarning($"Can't send log. No public properties found on type {typeof(T).Name}");
-                return;
+                throw new System.ArgumentException($"Can't send log. No public properties found", typeof(T).Name);
             }
 
             // T型をDictionaryに変換
@@ -51,8 +54,7 @@ namespace UniGasLogger.Service
         {
             if (data == null || data.Count == 0)
             {
-                Debug.LogError("Can't send log. Because data dictionary is null or empty");
-                return;
+                throw new System.ArgumentNullException(nameof(data), "Can't send log. Because data dictionary is null or empty");
             }
 
             await PostData(data, sheetName);
@@ -64,7 +66,7 @@ namespace UniGasLogger.Service
         private async Task PostData(Dictionary<string, object> data, string sheetName)
         {
             WWWForm form = new WWWForm();
-            form.AddField("sheetName", sheetName);
+            form.AddField("sheetName", sheetName ?? "");
 
             var keys = data.Keys.ToArray();
             form.AddField("keys", string.Join(',', keys));
