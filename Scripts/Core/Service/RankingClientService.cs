@@ -19,12 +19,13 @@ namespace UniGasLogger.Service
         /// <summary>
         /// トップ5ランキングを取得します。
         /// </summary>
-        public async Task<RankingResponse> GetTop5Ranking(string sheetName = "Ranking")
+        public async Task<RankingResponse> GetTopNRanking(int n, string sheetName)
         {
             var queryParams = new Dictionary<string, string>
-        {
-            {"sheetName", sheetName}
-        };
+            {
+                {"sheetName", sheetName},
+                {"topCount", n.ToString()}
+            };
 
             return await gasHttpClient.GetGas<RankingResponse>(queryParams);
         }
@@ -33,13 +34,13 @@ namespace UniGasLogger.Service
         /// 指定したスコアの順位を取得します。
         /// </summary>
         /// <param name="score">問い合わせたいスコア</param>
-        public async Task<ScoreRankResponse> GetScoreRank(BigInteger score, string sheetName = "Ranking")
+        public async Task<ScoreRankResponse> GetScoreRank(BigInteger score, string sheetName)
         {
             var queryParams = new Dictionary<string, string>
-        {
-            {"score", score.ToString()},
-            {"sheetName", sheetName}
-        };
+            {
+                {"score", score.ToString()},
+                {"sheetName", sheetName}
+            };
 
             return await gasHttpClient.GetGas<ScoreRankResponse>(queryParams);
         }

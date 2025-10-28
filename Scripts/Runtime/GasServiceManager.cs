@@ -48,9 +48,9 @@ namespace UniGasLogger
             await loggerService.SendLog(datas, sheetName);
         }
 
-        public async Task<RankingResponse> GetTop5Ranking(string sheetName = null)
+        public async Task<RankingResponse> GetTopNRanking(int n = 5, string sheetName = null)
         {
-            return await rankingService.GetTop5Ranking(sheetName);
+            return await rankingService.GetTopNRanking(n, sheetName);
         }
 
         public async Task<ScoreRankResponse> GetScoreRanking(BigInteger score, string sheetName = null)
