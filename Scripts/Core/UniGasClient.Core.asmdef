@@ -1,0 +1,16 @@
+{
+    "name": "UniGasClient.Core",
+    "rootNamespace": "UniGasClient",
+    "references": [
+        "GUID:2ffdda4604d794c4f9c826e418acf17f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
