@@ -112,11 +112,13 @@ namespace UniGasLogger.Data
                 return null;
             }
 
-            string editorFolderPath = Path.GetDirectoryName(scriptPath);
+            string dataFolderPath = Path.GetDirectoryName(scriptPath);
 
-            string scriptsFolderPath = Path.GetDirectoryName(editorFolderPath);
+            string coreFolderPath = Path.GetDirectoryName(dataFolderPath);
 
-            string libraryRootPath = Path.GetDirectoryName(scriptsFolderPath);
+            string scriptFolderPath = Path.GetDirectoryName(coreFolderPath);
+
+            string libraryRootPath = Path.GetDirectoryName(scriptFolderPath);
 
             return libraryRootPath;
         }
