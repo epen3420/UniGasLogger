@@ -31,16 +31,12 @@ namespace UniGasLogger.Data
         /// <returns>新しく作成されたGasSettings</returns>
         public static GasSettings CreateSettings()
         {
-            if (!FinalAssetPath.StartsWith("Assets/"))
-            {
-                Debug.LogError("Failed to create GasSettings: Asset path is invalid.");
-                return null;
-            }
-
             Debug.Log($"GasSettings asset not found. Creating a new one at '{FinalAssetPath}'");
 
-            EnsureFoldersExist();
+            // ★ 修正点: 汎用ヘルパーを呼び出す
+            EnsureAssetPathExists(FinalResourcesPath);
 
+            // これで親フォルダが確実に存在するので、アセットを作成できる
             var settings = ScriptableObject.CreateInstance<GasSettings>();
             AssetDatabase.CreateAsset(settings, FinalAssetPath);
             AssetDatabase.SaveAssets();
@@ -77,18 +73,33 @@ namespace UniGasLogger.Data
 
 
         /// <summary>
-        /// アセット保存先のフォルダ構造（Assets/Plugins/Resources）を確保する
+        /// "Assets/..." から始まる任意のパスを再帰的に作成するヘルパー関数
         /// </summary>
-        private static void EnsureFoldersExist()
+        /// <param name="path">例: "Assets/Plugins/UniGasLogger/Resources"</param>
+        private static void EnsureAssetPathExists(string path)
         {
-            if (!Directory.Exists(BaseDirPath))
-            {
-                AssetDatabase.CreateFolder("Assets", "Plugins");
-            }
+            // "Assets" 自体は作成不要なので除外
+            string[] folders = path.Split('/');
+            if (folders.Length == 0) return;
 
-            if (!Directory.Exists(FinalResourcesPath))
+            // "Assets" から始めて1階層ずつ確認
+            string currentPath = folders[0];
+
+            // i=1 (Assetsの次) からループ
+            for (int i = 1; i < folders.Length; i++)
             {
-                AssetDatabase.CreateFolder(BaseDirPath, ResourcesDirName);
+                string folderName = folders[i];
+                string newPath = currentPath + "/" + folderName;
+
+                // AssetDatabase.IsValidFolder は "Assets/..." 形式のパスを受け取る
+                if (!AssetDatabase.IsValidFolder(newPath))
+                {
+                    // AssetDatabase.CreateFolder は (親パス, 新フォルダ名) を受け取る
+                    AssetDatabase.CreateFolder(currentPath, folderName);
+                }
+
+                // 次のループのためにパスを更新
+                currentPath = newPath;
             }
         }
     }
