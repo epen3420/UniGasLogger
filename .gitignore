@@ -76,3 +76,6 @@ crashlytics-build.properties
 
 GasSettings.asset
 GasSettings.asset.meta
+
+*.meta
+!Unity/**/*.meta
