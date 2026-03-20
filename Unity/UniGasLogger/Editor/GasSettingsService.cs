@@ -17,15 +17,23 @@ namespace UniGasLogger.Editor
         /// 新しい GasSettings アセットを作成し、指定の場所に保存します。
         /// </summary>
         /// <returns>新しく作成されたGasSettings</returns>
-        public static GasSettings CreateSettings()
+        public static GasSettings LoadOrCreateSettings()
         {
-            Debug.Log($"GasSettings asset not found. Creating a new one at '{FinalAssetPath}'");
+            var settings = AssetDatabase.LoadAssetAtPath<GasSettings>(FinalAssetPath);
+
+            if (settings != null)
+            {
+                Debug.Log($"[UniGasLogger] Existing GasSettings found at '{FinalAssetPath}'. Updating values.");
+                return settings;
+            }
+
+            Debug.Log($"[UniGasLogger] GasSettings asset not found. Creating a new one at '{FinalAssetPath}'");
 
             // ★ 修正点: 汎用ヘルパーを呼び出す
             EnsureAssetPathExists(FinalResourcesPath);
 
             // これで親フォルダが確実に存在するので、アセットを作成できる
-            var settings = ScriptableObject.CreateInstance<GasSettings>();
+            settings = ScriptableObject.CreateInstance<GasSettings>();
             AssetDatabase.CreateAsset(settings, FinalAssetPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

@@ -19,12 +19,7 @@ namespace UniGasLogger.Editor
 
         private void OnEnable()
         {
-            settings = Resources.Load<GasSettings>("GasSettings");
-
-            if (settings == null)
-            {
-                settings = GasSettingsService.CreateSettings();
-            }
+            settings = GasSettingsService.LoadOrCreateSettings();
 
             newDeployId = settings.DeployId;
             newAuthToken = settings.AuthToken;
