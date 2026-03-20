@@ -64,7 +64,7 @@ https://github.com/epen3420/UniGasLogger.git?path=/Unity/UniGasLogger
 
 ```gitignore
 # UniGasLogger Settings
-/Assets/Pluging/UniGasLogger/Resources/GasSettings.asset
+/Assets/Plugins/UniGasLogger/Resources/GasSettings.asset
 /Assets/Plugins/UniGasLogger/Resources/GasSettings.asset.meta
 ```
 
