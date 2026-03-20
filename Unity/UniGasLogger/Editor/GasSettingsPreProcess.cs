@@ -30,8 +30,8 @@ namespace UniGasLogger.Editor
             string[] args = Environment.GetCommandLineArgs();
 
             deployId = GetArgument(args, "-UNIGAS_DEPLOY_ID");
-            authToken = GetArgument(args, "UNIGAS_AUTH_TOKEN");
-            sheetId = GetArgument(args, "UNIGAS_SHEET_ID");
+            authToken = GetArgument(args, "-UNIGAS_AUTH_TOKEN");
+            sheetId = GetArgument(args, "-UNIGAS_SHEET_ID");
 
             if (!(string.IsNullOrEmpty(deployId) ||
                 string.IsNullOrEmpty(authToken) ||
