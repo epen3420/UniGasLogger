@@ -13,19 +13,19 @@ namespace UniGasLogger.Editor
         }
 
         private GasSettings settings;
-        private bool newIsEnable;
-        private string newDeployId;
-        private string newAuthToken;
-        private string newSheetId;
+        private bool isEnable;
+        private string deployId;
+        private string authToken;
+        private string sheetId;
 
         private void OnEnable()
         {
             settings = GasSettingsService.LoadOrCreateSettings();
 
-            newIsEnable = settings.IsEnable;
-            newDeployId = settings.DeployId;
-            newAuthToken = settings.AuthToken;
-            newSheetId = settings.SheetId;
+            isEnable = settings.IsEnable;
+            deployId = settings.DeployId;
+            authToken = settings.AuthToken;
+            sheetId = settings.SheetId;
         }
 
         private void OnGUI()
@@ -45,24 +45,24 @@ namespace UniGasLogger.Editor
             EditorGUI.BeginChangeCheck();
 
             GUILayout.Label("Disable Logging");
-            newIsEnable = !GUILayout.Toggle(!newIsEnable, "");
+            isEnable = !GUILayout.Toggle(!isEnable, "");
 
-            EditorGUI.BeginDisabledGroup(!newIsEnable);
+            EditorGUI.BeginDisabledGroup(!isEnable);
             GUILayout.Label("Deploy ID");
-            newDeployId = GUILayout.TextField(newDeployId);
+            deployId = GUILayout.TextField(deployId);
 
             GUILayout.Label("Auth Token");
-            newAuthToken = GUILayout.TextField(newAuthToken);
+            authToken = GUILayout.TextField(authToken);
 
             GUILayout.Label("Sheet ID");
-            newSheetId = GUILayout.TextField(newSheetId);
+            sheetId = GUILayout.TextField(sheetId);
             EditorGUI.EndDisabledGroup();
 
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(settings, "Change LogSender Settings");
 
-                GasSettingsService.UpdateSettings(settings, newDeployId, newAuthToken, newSheetId, newIsEnable);
+                GasSettingsService.UpdateSettings(settings, deployId, authToken, sheetId, isEnable);
             }
 
             if (GUILayout.Button("Save Settings to Disk"))
