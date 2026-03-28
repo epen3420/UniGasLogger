@@ -13,6 +13,7 @@ namespace UniGasLogger.Editor
         }
 
         private GasSettings settings;
+        private bool newIsEnable;
         private string newDeployId;
         private string newAuthToken;
         private string newSheetId;
@@ -21,6 +22,7 @@ namespace UniGasLogger.Editor
         {
             settings = GasSettingsService.LoadOrCreateSettings();
 
+            newIsEnable = settings.IsEnable;
             newDeployId = settings.DeployId;
             newAuthToken = settings.AuthToken;
             newSheetId = settings.SheetId;
@@ -41,6 +43,9 @@ namespace UniGasLogger.Editor
             }
 
             EditorGUI.BeginChangeCheck();
+
+            GUILayout.Label("Disable Logging");
+            newIsEnable = GUILayout.Toggle(newIsEnable, "");
 
             GUILayout.Label("Deploy ID");
             newDeployId = GUILayout.TextField(newDeployId);
