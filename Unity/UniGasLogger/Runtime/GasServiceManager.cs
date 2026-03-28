@@ -25,6 +25,13 @@ namespace UniGasLogger
 
 
             var gasSettings = Resources.Load<GasSettings>("GasSettings");
+            if (!gasSettings.IsEnable)
+            {
+                Debug.LogWarning("[UniGasLogger]: UniGasLogger is disabled. if you were enable it please check 'Assets/Plugins/UniGasLogger'.");
+                enabled = false;
+                Destroy(this.gameObject);
+                return;
+            }
             var httpClient = new GasHttpClient(gasSettings);
 
             loggerService = new GasLoggerService(httpClient);
