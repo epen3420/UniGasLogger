@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using UniGasLogger.Data;
-using UniGasLogger.Http;
 
-namespace UniGasLogger.Service
+namespace UniGasLogger.Core
 {
     internal class RankingClientService
     {

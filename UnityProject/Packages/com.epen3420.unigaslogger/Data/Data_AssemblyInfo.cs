@@ -1,5 +1,5 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("UniGasClient.Runtime")]
-[assembly: InternalsVisibleTo("UniGasClient.Editor")]
-[assembly: InternalsVisibleTo("UniGasClient.Core")]
+[assembly: InternalsVisibleTo("UniGasLogger.Runtime")]
+[assembly: InternalsVisibleTo("UniGasLogger.Editor")]
+[assembly: InternalsVisibleTo("UniGasLogger.Core")]

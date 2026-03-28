@@ -1,6 +1,5 @@
 using UniGasLogger.Data;
-using UniGasLogger.Service;
-using UniGasLogger.Http;
+using UniGasLogger.Core;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;

@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UniGasLogger.Http;
 
-namespace UniGasLogger.Service
+namespace UniGasLogger.Core
 {
     internal class GasLoggerService
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UniGasLogger.Data;
 
-namespace UniGasLogger.Http
+namespace UniGasLogger.Core
 {
     internal class GasHttpClient
     {
