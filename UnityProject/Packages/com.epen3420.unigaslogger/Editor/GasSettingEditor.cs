@@ -45,7 +45,7 @@ namespace UniGasLogger.Editor
             EditorGUI.BeginChangeCheck();
 
             GUILayout.Label("Disable Logging");
-            newIsEnable = GUILayout.Toggle(newIsEnable, "");
+            newIsEnable = !GUILayout.Toggle(!newIsEnable, "");
 
             EditorGUI.BeginDisabledGroup(!newIsEnable);
             GUILayout.Label("Deploy ID");
