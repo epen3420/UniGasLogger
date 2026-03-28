@@ -47,6 +47,7 @@ namespace UniGasLogger.Editor
             GUILayout.Label("Disable Logging");
             newIsEnable = GUILayout.Toggle(newIsEnable, "");
 
+            EditorGUI.BeginDisabledGroup(!newIsEnable);
             GUILayout.Label("Deploy ID");
             newDeployId = GUILayout.TextField(newDeployId);
 
@@ -55,13 +56,13 @@ namespace UniGasLogger.Editor
 
             GUILayout.Label("Sheet ID");
             newSheetId = GUILayout.TextField(newSheetId);
-
+            EditorGUI.EndDisabledGroup();
 
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(settings, "Change LogSender Settings");
 
-                GasSettingsService.UpdateSettings(settings, newDeployId, newAuthToken, newSheetId);
+                GasSettingsService.UpdateSettings(settings, newDeployId, newAuthToken, newSheetId, newIsEnable);
             }
 
             if (GUILayout.Button("Save Settings to Disk"))
