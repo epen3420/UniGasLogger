@@ -67,7 +67,14 @@ namespace UniGasLogger.Editor
 
             if (GUILayout.Button("Save Settings to Disk"))
             {
+                EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                 GasSettingsService.SaveSettingsToDisk();
+                EditorGUI.EndDisabledGroup();
+            }
+
+            if (EditorApplication.isPlaying)
+            {
+                EditorGUILayout.HelpBox("エディターがプレイモードの時は変更できません。プレイモードを解除してから保存してください。", MessageType.Info);
             }
         }
     }
