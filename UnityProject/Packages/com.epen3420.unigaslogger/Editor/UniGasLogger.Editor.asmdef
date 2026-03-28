@@ -1,6 +1,6 @@
 {
-    "name": "UniGasClient.Editor",
-    "rootNamespace": "UniGasClient",
+    "name": "UniGasLogger.Editor",
+    "rootNamespace": "UniGasLogger",
     "references": [
         "GUID:9f5453858313ccc4f8e5793c65160c36",
         "GUID:bd0816f2d63e9d347942e030a6a563ee"

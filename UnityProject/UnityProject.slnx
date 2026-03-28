@@ -23,7 +23,7 @@
   <Project Path="Unity.AI.Navigation.Updater.csproj" />
   <Project Path="UniGasLogger.Data.csproj" />
   <Project Path="Unity.AI.Navigation.Editor.csproj" />
-  <Project Path="UniGasClient.Editor.csproj" />
+  <Project Path="UniGasLogger.Editor.csproj" />
   <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.Collections.CodeGen.csproj" />
@@ -31,11 +31,12 @@
   <Project Path="Unity.VisualScripting.SettingsProvider.Editor.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
+  <Project Path="UniGasLogger.Samples.csproj" />
   <Project Path="Unity.CollabProxy.Editor.csproj" />
-  <Project Path="UniGasClient.Core.csproj" />
+  <Project Path="UniGasLogger.Core.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.VisualScripting.DocCodeExamples.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.Entities.csproj" />
-  <Project Path="UniGasClient.Runtime.csproj" />
+  <Project Path="UniGasLogger.Runtime.csproj" />
   <Project Path="Unity.Collections.Editor.csproj" />
 </Solution>
