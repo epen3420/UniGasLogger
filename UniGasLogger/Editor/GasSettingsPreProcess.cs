@@ -14,7 +14,7 @@ namespace UniGasLogger.Editor
         public void OnPreprocessBuild(BuildReport report)
         {
             string isEnableStr = Environment.GetEnvironmentVariable("UNIGAS_IS_ENABLE");
-            bool isEnable = string.IsNullOrEmpty(isEnableStr) ? true : bool.Parse(isEnableStr);
+            bool isEnable = bool.TryParse(isEnableStr, out isEnable) ? isEnable : true;
             string deployId = Environment.GetEnvironmentVariable("UNIGAS_DEPLOY_ID");
             string authToken = Environment.GetEnvironmentVariable("UNIGAS_AUTH_TOKEN");
             string sheetId = Environment.GetEnvironmentVariable("UNIGAS_SHEET_ID");
@@ -32,7 +32,7 @@ namespace UniGasLogger.Editor
             string[] args = Environment.GetCommandLineArgs();
 
             isEnableStr = GetArgument(args, "-UNIGAS_IS_ENABLE");
-            isEnable = string.IsNullOrEmpty(isEnableStr) ? true : bool.Parse(isEnableStr);
+            isEnable = bool.TryParse(isEnableStr, out isEnable) ? isEnable : true;
             deployId = GetArgument(args, "-UNIGAS_DEPLOY_ID");
             authToken = GetArgument(args, "-UNIGAS_AUTH_TOKEN");
             sheetId = GetArgument(args, "-UNIGAS_SHEET_ID");
