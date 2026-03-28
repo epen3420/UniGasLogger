@@ -45,14 +45,14 @@ namespace UniGasLogger.Editor
         /// <summary>
         /// ScriptableObject の設定値を更新し、ダーティ（変更済み）としてマークする
         /// </summary>
-        public static void UpdateSettings(GasSettings settings, string newDeployId, string newAuthToken, string newSheetId)
+        public static void UpdateSettings(GasSettings settings, string newDeployId, string newAuthToken, string newSheetId, bool isEnable)
         {
             // settingsがnullの場合は処理を中断
             if (settings == null) return;
 
             Undo.RecordObject(settings, "Change LogSender Settings");
 
-            settings.Init(newDeployId, newAuthToken, newSheetId);
+            settings.Init(newDeployId, newAuthToken, newSheetId, isEnable);
 
             EditorUtility.SetDirty(settings);
         }
