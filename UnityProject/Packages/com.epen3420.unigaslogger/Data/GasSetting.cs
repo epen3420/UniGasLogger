@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace UniGasLogger.Data
 {
-    [CreateAssetMenu(fileName = "NewGasSettings", menuName = "GasSettings")]
     internal class GasSettings : ScriptableObject
     {
         [SerializeField]
