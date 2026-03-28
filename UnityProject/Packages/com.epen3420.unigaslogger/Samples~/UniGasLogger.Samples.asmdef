@@ -1,0 +1,17 @@
+{
+    "name": "UniGasLogger.Samples",
+    "rootNamespace": "UniGasLogger",
+    "references": [
+        "GUID:9f5453858313ccc4f8e5793c65160c36",
+        "GUID:5368287093cca324eb4a2efb97650580"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,38 @@
+{
+  "name": "com.epen3420.unigaslogger",
+  "version": "1.3.0",
+  "displayName": "UniGasLogger",
+  "description": "UnityからGoogle Apps Script (GAS) への非同期通信を行い、ログ送信やランキング取得を行うライブラリです。",
+  "documentationUrl": "https://github.com/epen3420/UniGasLogger/blob/main/README.md",
+  "licensesUrl": "https://github.com/epen3420/UniGasLogger/blob/main/LICENSE",
+  "author": {
+    "name": "epen3420",
+    "url": "https://github.com/epen3420",
+    "email": "epen3420@gmail.com"
+  },
+  "unity": "2020.3",
+  "keywords": [
+    "Unity",
+    "GAS",
+    "Google Apps Script",
+    "Logger",
+    "Ranking"
+  ],
+  "samples": [
+    {
+      "displayName": "SendLog Sample",
+      "description": "Gasへのログ送信のサンプルです",
+      "path": "Samples~/SendLogSample"
+    },
+    {
+      "displayName": "Ranking Sample",
+      "description": "GASへのランキング取得のサンプルです。",
+      "path": "Samples~/RankingSample"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/epen3420/UniGasLogger.git",
+    "type": "git",
+    "revision": "e696668d7bf80a1f8732d087cae6d0e8c88e0b31"
+  }
+}
