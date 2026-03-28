@@ -2,12 +2,15 @@
     "name": "com.epen3420.unigaslogger",
     "version": "1.2.1",
     "displayName": "UniGasLogger",
-    "description": "UnityからGoogle Apps Script (GAS) への非同期通信を行い、ログ送信やランキング取得を行うライブラリです。",
-    "unity": "2020.3",
+    "description": "Unity\u304b\u3089Google Apps Script (GAS) \u3078\u306e\u975e\u540c\u671f\u901a\u4fe1\u3092\u884c\u3044\u3001\u30ed\u30b0\u9001\u4fe1\u3084\u30e9\u30f3\u30ad\u30f3\u30b0\u53d6\u5f97\u3092\u884c\u3046\u30e9\u30a4\u30d6\u30e9\u30ea\u3067\u3059\u3002",
+    "documentationUrl": "https://github.com/epen3420/UniGasLogger/blob/main/README.md",
+    "licensesUrl": "https://github.com/epen3420/UniGasLogger/blob/main/LICENSE",
     "author": {
         "name": "epen3420",
-        "url": "https://github.com/epen3420"
+        "url": "https://github.com/epen3420",
+        "email": "epen3420@gmail.com"
     },
+    "unity": "2020.3",
     "keywords": [
         "Unity",
         "GAS",
@@ -15,5 +18,16 @@
         "Logger",
         "Ranking"
     ],
-    "dependencies": {}
+    "samples": [
+        {
+            "displayName": "SendLog Sample",
+            "description": "Gasへのログ送信のサンプルです",
+            "path": "Samples~/SendLogSample"
+        },
+        {
+            "displayName": "Ranking Sample",
+            "description": "GASへのランキング取得のサンプルです。",
+            "path": "Samples~/RankingSample"
+        }
+    ]
 }
