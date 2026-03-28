@@ -16,6 +16,13 @@ namespace UniGasLogger.Core
         }
 
 
+        /// <summary>
+        /// 指定したデータ構造をログとして送信します
+        /// </summary>
+        /// <typeparam name="T">送信用のデータクラス(Publicなプロパティが必要です)</typeparam>
+        /// <returns>asyncのTask</returns>
+        /// <exception cref="System.ArgumentNullException">引数のいずれかがnullだった場合にスローされます</exception>
+        /// <exception cref="System.ArgumentException">data内のプロパティ数が0だった場合にスローされます</exception>
         public async Task SendLog<T>(T data, string sheetName)
         {
             if (data == null)
@@ -28,7 +35,6 @@ namespace UniGasLogger.Core
                 throw new System.ArgumentNullException(nameof(sheetName), "can not send log. because sheetName is null.");
             }
 
-            // **修正**: GetPropertiesを使って、インスタンスのpublicプロパティのみを取得
             var dataProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             if (dataProperties.Length == 0)
@@ -36,7 +42,6 @@ namespace UniGasLogger.Core
                 throw new System.ArgumentException($"Can't send log. No public properties found", typeof(T).Name);
             }
 
-            // T型をDictionaryに変換
             var dataDict = new Dictionary<string, object>();
             foreach (var prop in dataProperties)
             {
@@ -47,7 +52,8 @@ namespace UniGasLogger.Core
         }
 
         /// <summary>
-        /// Dictionary<string, object> のデータをログとして送信します。
+        /// データの名前をKeyとして、データの値をValueとしたDictionaryを送信します。
+        /// Valueにはobject.ToString()を使用します
         /// </summary>
         public async Task SendLog(Dictionary<string, object> data, string sheetName)
         {
@@ -60,7 +66,7 @@ namespace UniGasLogger.Core
         }
 
         /// <summary>
-        /// [共通化] 辞書データをWWWFormに変換し、GASにPOSTする内部メソッド
+        /// 辞書データをWWWFormに変換し、GASにPOSTする内部メソッド
         /// </summary>
         private async Task PostData(Dictionary<string, object> data, string sheetName)
         {
