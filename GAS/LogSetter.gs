@@ -10,7 +10,7 @@ function doPost(e) {
     const receivedToken = e.parameter.authToken;
 
     if (!isAuthenticated(receivedToken)){
-      throw new Error("何らかのエラーが発生しました。");
+      throw new Error("Authentication Failed: Invalid Token");
     }
 
     const payload = e.parameter;
