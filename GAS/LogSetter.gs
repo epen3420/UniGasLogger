@@ -13,10 +13,10 @@ function doPost(e) {
       throw new Error("何らかのエラーが発生しました。");
     }
 
-    const sentDatas = e.parameter;
-    const dataKeys = sentDatas.keys.split(',');
-    const sheetID = sentDatas.sheetID;
-    const sheetName = sentDatas.sheetName;
+    const payload = e.parameter;
+    const dataKeys = payload.keys.split(',');
+    const sheetID = payload.sheetID;
+    const sheetName = payload.sheetName;
     const spreadsheet = SpreadsheetApp.openById(sheetID);
     const expectedHeader = ['TimeStamp', ...dataKeys];
 
@@ -77,8 +77,8 @@ function doPost(e) {
       if (headerName === 'TimeStamp') {
         return new Date();
       }
-      else if (sentDatas.hasOwnProperty(headerName)) {
-        return sentDatas[headerName];
+      else if (payload.hasOwnProperty(headerName)) {
+        return payload[headerName];
       }
       return null;
     });
