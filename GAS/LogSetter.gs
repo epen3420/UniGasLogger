@@ -58,15 +58,18 @@ function determineTargetSheet(spreadsheet, sheetName, expectedHeader) {
     const sheet = spreadsheet.getSheetByName(sheetName);
     if (sheet) {
       const currentHeader = getHeader(sheet);
-      if (!isSubset(expectedHeader, currentHeader)) {
-        throw new Error(`指定された名前のシートに必要なヘッダーが存在しません。シート: ${sheetName}`);
+      if (isSubset(expectedHeader, currentHeader)) {
+        return { targetSheet: sheet, finalHeaderArray: currentHeader };
       }
 
-      return { targetSheet: sheet, finalHeaderArray: currentHeader };
+      console.log(`シート「${sheetName}」のヘッダーが不一致のため、新しいシートを作成します。`);
     }
 
-    // 指定された名前のシートが存在しない場合は新規作成して返す
-    return { targetSheet: spreadsheet.insertSheet(sheetName), finalHeaderArray: expectedHeader };
+    // シートが存在しない、またはヘッダー不一致の場合：
+    // 指定された名前をベースに「名前1」「名前2」などの空き番号シートを作成
+    const nextName = findNextSheetName(spreadsheet, sheetName);
+    const newSheet = spreadsheet.insertSheet(nextName);
+    return { targetSheet: newSheet, finalHeaderArray: expectedHeader };
   }
 
   // 2: 同じヘッダーがあるシート
