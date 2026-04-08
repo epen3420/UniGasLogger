@@ -5,17 +5,17 @@
  */
 function generateSecretKey() {
   const TIMESTAMP = new Date().getTime().toString();
-  
+
   // 乱数とタイムスタンプを組み合わせたシークレット（真のランダムシードとして）
   const RANDOM_SEED = TIMESTAMP + Math.random().toString();
-  
+
   // HMAC-SHA256でハッシュ値を生成
   const hash = Utilities.computeHmacSha256Signature(RANDOM_SEED, TIMESTAMP);
-  
+
   // Base64でエンコードしてキーとして使用
   const key = Utilities.base64Encode(hash);
 
-  Logger.log(key); 
+  Logger.log(key);
 }
 
 /**
@@ -25,7 +25,7 @@ function generateSecretKey() {
 function isAuthenticated(receivedToken) {
   // 引数がnullだったらfalse
   if (receivedToken == null) return false;
-  
+
   const SECRET_TOKEN_KEY = 'AUTH_TOKEN';
 
   // Propertyにキーが存在しなかったらfalse
@@ -51,17 +51,21 @@ function isSubset(headerA, headerB) {
 }
 
 /**
- * 次に作成すべきシート名を「シートX」の形式で探すヘルパー関数
- * 例: 「シート1」「シート3」があれば「シート2」を返す
- * @param {Spreadsheet} spreadsheet - 対象のスプレッドシート
- * @return {string} - 次に作成すべきシート名
+ * 指定されたベース名のシートで、存在しない最小の番号（欠番）を探して新しいシート名を返す
+ * @param {SpreadsheetApp.Spreadsheet} spreadsheet - スプレッドシートオブジェクト
+ * @param {string} baseName - シート名のベース（デフォルトは "シート"）
+ * @returns {string} 新しいシート名（例: "Log1", "Data2"）
  */
-function findNextSheetName(spreadsheet) {
+function findNextSheetName(spreadsheet, baseName = 'シート') {
   const sheets = spreadsheet.getSheets();
   const sheetNumbers = [];
-  const regex = /^シート(\d+)$/; // "シート" + 数字 の形式にマッチ
 
-  // 既存のシート名から番号を抽出
+  // 1. 変数から正規表現を動的に作成
+  // baseNameに正規表現の特殊文字（. * + ? ^ $ { } ( ) | [ ] \）が含まれていた場合、ただの文字として扱うためにエスケープする
+  const escapedBaseName = baseName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`^${escapedBaseName}(\\d+)$`);
+
+  // 2. 既存のシート名から番号を抽出
   sheets.forEach(sheet => {
     const sheetName = sheet.getName();
     const match = sheetName.match(regex);
@@ -70,20 +74,21 @@ function findNextSheetName(spreadsheet) {
     }
   });
 
-  // 1から順番にチェックして、存在しない最小の番号（欠番）を探す
+  // 3. 1から順番にチェックして、存在しない最小の番号（欠番）を探す
   let nextNumber = 1;
   sheetNumbers.sort((a, b) => a - b); // 番号を昇順にソート
+
   for (const num of sheetNumbers) {
     if (num === nextNumber) {
       nextNumber++;
-    } 
-    else {
+    }
+    else if (num > nextNumber) {
       // 欠番が見つかった
       break;
     }
   }
-  
-  return `シート${nextNumber}`;
+
+  return `${baseName}${nextNumber}`;
 }
 
 /**
@@ -92,7 +97,7 @@ function findNextSheetName(spreadsheet) {
  */
 function getHeader(sheet){
   const lastColumn = sheet.getLastColumn();
-  
+
   return (sheet.getLastRow() > 0 && lastColumn > 0)
           ? sheet.getRange(1, 1, 1, lastColumn).getValues()[0]
           : [];

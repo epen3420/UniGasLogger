@@ -6,79 +6,33 @@ function doPost(e) {
 
   try {
     lock.waitLock(1000 * 20);
-    
+
     const receivedToken = e.parameter.authToken;
 
     if (!isAuthenticated(receivedToken)){
-      throw new Error("何らかのエラーが発生しました。");
+      throw new Error("Authentication Failed: Invalid Token");
     }
-  
-    const sentDatas = e.parameter;
-    const dataKeys = sentDatas.keys.split(',');
-    const sheetID = sentDatas.sheetID;
-    const sheetName = sentDatas.sheetName; 
+
+    const payload = e.parameter;
+    const dataKeys = payload.keys.split(',');
+    const sheetID = payload.sheetID;
+    const sheetName = payload.sheetName;
     const spreadsheet = SpreadsheetApp.openById(sheetID);
     const expectedHeader = ['TimeStamp', ...dataKeys];
-    
-    let finalHeaderArray = expectedHeader;
-    let targetSheet = null;
 
-    // 1: 指定された名前のシートを指定
-    if (sheetName != null && sheetName != ""){
-      targetSheet = spreadsheet.getSheetByName(sheetName);
+    const { targetSheet, finalHeaderArray } = determineTargetSheet(spreadsheet, sheetName, expectedHeader);
 
-      // 1a: 存在しなければ作成
-      if (targetSheet != null){
-        if (!isSubset(expectedHeader, getHeader(targetSheet))){
-          throw new Error(`指定された名前のシートに必要なヘッダーが存在しません。シート: ${sheetName}, 必要なヘッダー: ${expectedHeader}`);
-        }
-      }
-      else{
-        targetSheet = spreadsheet.insertSheet(sheetName);
-      }
+    // シートが空（新規作成含む）の時だけヘッダーを書き込む
+    if (targetSheet.getLastRow() === 0) {
+      targetSheet.getRange(1, 1, 1, finalHeaderArray.length).setValues([finalHeaderArray]);
     }
 
-    // 2: 必要なデータのヘッダーが含まれているシートを指定
-    if (targetSheet === null) {
-      const allSheets = spreadsheet.getSheets();
-
-      for (const sheet of allSheets) {
-        const sheetHeader = getHeader(sheet);
-        
-        if (isSubset(expectedHeader, sheetHeader)) {
-          targetSheet = sheet;
-          finalHeaderArray = sheetHeader;
-          break;
-        }
-      }
-    }
-
-    // 3: 何もデータのないシートを指定
-    if(targetSheet == null){
-      const allSheets = spreadsheet.getSheets();
-
-      for (const sheet of allSheets) {
-        if (sheet.getLastRow() < 1) {
-          targetSheet = sheet;
-          break;
-        }
-      }
-    }
-
-    // 4: 1~3を通らなかったら、新しいシートを作成
-    if (targetSheet === null) {
-      const newSheetName = findNextSheetName(spreadsheet);
-      targetSheet = spreadsheet.insertSheet(newSheetName);
-    }
-
-    targetSheet.getRange(1, 1, 1, finalHeaderArray.length).setValues([finalHeaderArray]);
-    
     const rowToAppend = finalHeaderArray.map(headerName => {
       if (headerName === 'TimeStamp') {
         return new Date();
       }
-      else if (sentDatas.hasOwnProperty(headerName)) {
-        return sentDatas[headerName];
+      else if (payload.hasOwnProperty(headerName)) {
+        return payload[headerName];
       }
       return null;
     });
@@ -87,15 +41,62 @@ function doPost(e) {
 
     const output = ContentService.createTextOutput('Completed append to spread sheet');
     return output.setMimeType(ContentService.MimeType.TEXT);
-
-  } 
+  }
   catch (error) {
     console.log('Exception Error: ' + error.stack);
     const output = ContentService.createTextOutput('Error: ' + error.message);
     return output.setMimeType(ContentService.MimeType.TEXT);
-
-  } 
+  }
   finally {
     lock.releaseLock();
   }
+}
+
+function determineTargetSheet(spreadsheet, sheetName, expectedHeader) {
+  // 1: 指定された名前のシートを処理
+  if (sheetName) {
+    const sheet = spreadsheet.getSheetByName(sheetName);
+    if (sheet) {
+      const currentHeader = getHeader(sheet);
+      if (isSubset(expectedHeader, currentHeader)) {
+        return { targetSheet: sheet, finalHeaderArray: currentHeader };
+      }
+
+      console.log(`Header mismatch in '${sheetName}'. Creating a new sheet.`);
+    }
+
+    // シートが存在しない、またはヘッダー不一致の場合：
+    // 指定された名前をベースに「名前1」「名前2」などの空き番号シートを作成
+    const nextName = findNextSheetName(spreadsheet, sheetName);
+    const newSheet = spreadsheet.insertSheet(nextName);
+    return { targetSheet: newSheet, finalHeaderArray: expectedHeader };
+  }
+
+  // 2: 同じヘッダーがあるシート
+  // 3: 空のシート
+  // 2 & 3 を同時に探す
+  const allSheets = spreadsheet.getSheets();
+  let emptySheetFallback = null;
+
+  for (const sheet of allSheets) {
+    if (sheet.getLastRow() === 0) {
+      // 空シートを見つけたらフォールバック
+      if (!emptySheetFallback)
+        emptySheetFallback = sheet;
+    } else {
+      // なにかデータがあるシートならヘッダーを検証
+      const sheetHeader = getHeader(sheet);
+      if (isSubset(expectedHeader, sheetHeader)) {
+        return { targetSheet: sheet, finalHeaderArray: sheetHeader };
+      }
+    }
+  }
+
+  if (emptySheetFallback) {
+    return { targetSheet: emptySheetFallback, finalHeaderArray: expectedHeader };
+  }
+
+  // 4: 1~3を全て通らなかったら、新しいシートを作成して返す
+  const newSheetName = findNextSheetName(spreadsheet);
+  return { targetSheet: spreadsheet.insertSheet(newSheetName), finalHeaderArray: expectedHeader };
 }
