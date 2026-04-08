@@ -71,7 +71,10 @@ function doPost(e) {
       targetSheet = spreadsheet.insertSheet(newSheetName);
     }
 
-    targetSheet.getRange(1, 1, 1, finalHeaderArray.length).setValues([finalHeaderArray]);
+    // シートが空（新規作成含む）の時だけヘッダーを書き込む
+    if (targetSheet.getLastRow() === 0) {
+      targetSheet.getRange(1, 1, 1, finalHeaderArray.length).setValues([finalHeaderArray]);
+    }
 
     const rowToAppend = finalHeaderArray.map(headerName => {
       if (headerName === 'TimeStamp') {
