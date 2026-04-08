@@ -62,7 +62,7 @@ function determineTargetSheet(spreadsheet, sheetName, expectedHeader) {
         return { targetSheet: sheet, finalHeaderArray: currentHeader };
       }
 
-      console.log(`シート「${sheetName}」のヘッダーが不一致のため、新しいシートを作成します。`);
+      console.log(`Header mismatch in '${sheetName}'. Creating a new sheet.`);
     }
 
     // シートが存在しない、またはヘッダー不一致の場合：
