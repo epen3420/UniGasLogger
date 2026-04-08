@@ -6,20 +6,20 @@ function doPost(e) {
 
   try {
     lock.waitLock(1000 * 20);
-    
+
     const receivedToken = e.parameter.authToken;
 
     if (!isAuthenticated(receivedToken)){
       throw new Error("何らかのエラーが発生しました。");
     }
-  
+
     const sentDatas = e.parameter;
     const dataKeys = sentDatas.keys.split(',');
     const sheetID = sentDatas.sheetID;
-    const sheetName = sentDatas.sheetName; 
+    const sheetName = sentDatas.sheetName;
     const spreadsheet = SpreadsheetApp.openById(sheetID);
     const expectedHeader = ['TimeStamp', ...dataKeys];
-    
+
     let finalHeaderArray = expectedHeader;
     let targetSheet = null;
 
@@ -44,7 +44,7 @@ function doPost(e) {
 
       for (const sheet of allSheets) {
         const sheetHeader = getHeader(sheet);
-        
+
         if (isSubset(expectedHeader, sheetHeader)) {
           targetSheet = sheet;
           finalHeaderArray = sheetHeader;
@@ -72,7 +72,7 @@ function doPost(e) {
     }
 
     targetSheet.getRange(1, 1, 1, finalHeaderArray.length).setValues([finalHeaderArray]);
-    
+
     const rowToAppend = finalHeaderArray.map(headerName => {
       if (headerName === 'TimeStamp') {
         return new Date();
@@ -87,14 +87,12 @@ function doPost(e) {
 
     const output = ContentService.createTextOutput('Completed append to spread sheet');
     return output.setMimeType(ContentService.MimeType.TEXT);
-
-  } 
+  }
   catch (error) {
     console.log('Exception Error: ' + error.stack);
     const output = ContentService.createTextOutput('Error: ' + error.message);
     return output.setMimeType(ContentService.MimeType.TEXT);
-
-  } 
+  }
   finally {
     lock.releaseLock();
   }
