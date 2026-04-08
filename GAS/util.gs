@@ -5,17 +5,17 @@
  */
 function generateSecretKey() {
   const TIMESTAMP = new Date().getTime().toString();
-  
+
   // 乱数とタイムスタンプを組み合わせたシークレット（真のランダムシードとして）
   const RANDOM_SEED = TIMESTAMP + Math.random().toString();
-  
+
   // HMAC-SHA256でハッシュ値を生成
   const hash = Utilities.computeHmacSha256Signature(RANDOM_SEED, TIMESTAMP);
-  
+
   // Base64でエンコードしてキーとして使用
   const key = Utilities.base64Encode(hash);
 
-  Logger.log(key); 
+  Logger.log(key);
 }
 
 /**
@@ -25,7 +25,7 @@ function generateSecretKey() {
 function isAuthenticated(receivedToken) {
   // 引数がnullだったらfalse
   if (receivedToken == null) return false;
-  
+
   const SECRET_TOKEN_KEY = 'AUTH_TOKEN';
 
   // Propertyにキーが存在しなかったらfalse
@@ -76,13 +76,13 @@ function findNextSheetName(spreadsheet) {
   for (const num of sheetNumbers) {
     if (num === nextNumber) {
       nextNumber++;
-    } 
+    }
     else {
       // 欠番が見つかった
       break;
     }
   }
-  
+
   return `シート${nextNumber}`;
 }
 
@@ -92,7 +92,7 @@ function findNextSheetName(spreadsheet) {
  */
 function getHeader(sheet){
   const lastColumn = sheet.getLastColumn();
-  
+
   return (sheet.getLastRow() > 0 && lastColumn > 0)
           ? sheet.getRange(1, 1, 1, lastColumn).getValues()[0]
           : [];
