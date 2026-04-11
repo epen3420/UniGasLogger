@@ -58,7 +58,13 @@ namespace UniGasLogger.Core
             queryParams["sheetID"] = settings.SheetId;
 
             // クエリ文字列を構築
-            fullUrl += string.Join("&", queryParams.Select(p => $"{p.Key}={p.Value}"));
+            fullUrl += string.Join("&", queryParams.Select(p =>
+                {
+                    string key = UnityWebRequest.EscapeURL(p.Key);
+                    string value = UnityWebRequest.EscapeURL(p.Value);
+                    return $"{key}={value}";
+                })
+            );
 
             using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
             {
