@@ -66,45 +66,43 @@ namespace UniGasLogger.Core
                 })
             );
 
-            using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
+            using UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl);
+            var operation = webRequest.SendWebRequest();
+
+            while (!operation.isDone)
             {
-                // Cysharp.Threading.Tasks を使用
-                var operation = webRequest.SendWebRequest();
+                await Task.Yield();
+            }
 
-                while (!operation.isDone)
+            if (webRequest.result != UnityWebRequest.Result.Success)
+            {
+                string responseText = webRequest.downloadHandler.text;
+                string errorMessage = $"Error: {webRequest.error}. Response: {responseText}";
+
+                // GASからのエラー応答（JSON）をパースし、詳細なエラーをログに出力
+                try
                 {
-                    await Task.Yield();
+                    GasErrorResponse errorResponse = JsonUtility.FromJson<GasErrorResponse>(responseText);
+                    errorMessage = $"GAS Error: {errorResponse.error} (Details: {errorResponse.details})";
+                }
+                catch
+                {
+                    // パースに失敗した場合はそのまま
                 }
 
-                if (webRequest.result != UnityWebRequest.Result.Success)
-                {
-                    string responseText = webRequest.downloadHandler.text;
-                    string errorMessage = $"Error: {webRequest.error}. Response: {responseText}";
+                Debug.LogError(errorMessage);
+                return default;
+            }
+            else
+            {
+                string jsonResponse = webRequest.downloadHandler.text;
+                Debug.Log($"GAS Response: {jsonResponse}");
 
-                    // GASからのエラー応答（JSON）をパースし、詳細なエラーをログに出力
-                    try
-                    {
-                        GasErrorResponse errorResponse = JsonUtility.FromJson<GasErrorResponse>(responseText);
-                        errorMessage = $"GAS Error: {errorResponse.error} (Details: {errorResponse.details})";
-                    }
-                    catch
-                    {
-                        // パースに失敗した場合はそのまま
-                    }
-
-                    Debug.LogError(errorMessage);
-                    return default;
-                }
-                else
-                {
-                    string jsonResponse = webRequest.downloadHandler.text;
-                    Debug.Log($"GAS Response: {jsonResponse}");
-
-                    T response = JsonUtility.FromJson<T>(jsonResponse);
-                    return response;
-                }
+                T response = JsonUtility.FromJson<T>(jsonResponse);
+                return response;
             }
         }
-
     }
+
+}
 }
