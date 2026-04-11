@@ -9,7 +9,7 @@ function doGet(e) {
     // --- 1. 認証チェック ---
     const receivedToken = e.parameter.authToken;
     if (!isAuthenticated(receivedToken)) {
-      return createJsonResponse({ error: `Unauthorized access (Invalid or missing authToken).` });
+      return createStatusResponse(STATUS.Error, `Unauthorized access (Invalid or missing authToken).`);
     }
     const sheetID = e.parameter.sheetID;
     const sheetName = e.parameter.sheetName;
@@ -19,14 +19,14 @@ function doGet(e) {
     const sheet = spreadsheet.getSheetByName(sheetName);
 
     if (!sheet) {
-      return createJsonResponse({ error: `Sheet "${sheetName}" not found.` });
+      return createStatusResponse(STATUS.Error, `Sheet "${sheetName}" not found.`);
     }
 
     // --- 2. データとヘッダーの取得・解析 ---
     const { sheetHeader, data, scoreColumnNum, nameColumnNum } = fetchAndAnalyzeData(sheet);
 
     if (scoreColumnNum === -1) {
-      return createJsonResponse({ error: "'Score' column not found in sheet." });
+      return createStatusResponse(STATUS.Error, "'Score' column not found in sheet.");
     }
 
     // --- 3. モード分岐と実行 ---
@@ -36,16 +36,14 @@ function doGet(e) {
       return calculateRank(targetScoreParam, data, scoreColumnNum);
     } else {
       if (nameColumnNum === -1) {
-        return createJsonResponse({ error: `"name" column not found (required for top ${topCount} ranking).` });
+        return createStatusResponse(STATUS.Error, `"name" column not found (required for top ${topCount} ranking).`);
       }
       return getTopRanking(data, scoreColumnNum, nameColumnNum, topCount);
     }
-  } 
+  }
   catch (error) {
-    // エラーハンドリング
     console.log('Exception Error in doGet: ' + error.stack);
-    // C#規則: nameColumnNum をチェック
-    return createJsonResponse({ error: "An unexpected error occurred.", details: error.message });
+    return createStatusResponse(STATUS.Error, `Error: ${error.message}`);
   }
 }
 
@@ -63,10 +61,10 @@ function fetchAndAnalyzeData(sheet) {
   if (sheet.getLastRow() < 1) {
       return { sheetHeader: [], data: [], scoreColumnNum: -1, nameColumnNum: -1 };
   }
-  
+
   // ヘッダーの取得
   const sheetHeader = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
-  
+
   let nameColumnNum = -1;
   let scoreColumnNum = -1;
 
@@ -75,7 +73,7 @@ function fetchAndAnalyzeData(sheet) {
     const header = sheetHeader[i];
     if (header === 'name') {
       nameColumnNum = i;
-    } 
+    }
     else if (header === 'Score') {
       scoreColumnNum = i;
     }
@@ -85,7 +83,7 @@ function fetchAndAnalyzeData(sheet) {
   if (numRows <= 0) {
       return { sheetHeader, data: [], scoreColumnNum, nameColumnNum };
   }
-  
+
   // データ本体の取得
   const data = sheet.getRange(startRow, 1, numRows, lastColumn).getValues();
 
@@ -104,12 +102,12 @@ function getTopRanking(data, scoreColumnNum, nameColumnNum, topN) {
   if (data.length === 0) {
     return createJsonResponse({ ranking: [] });
   }
-  
+
   // Score列で降順ソート
   const sortedData = data.sort(function(a, b) {
     const scoreA = parseFloat(a[scoreColumnNum]);
     const scoreB = parseFloat(b[scoreColumnNum]);
-    
+
     // 非数値はソートの最後に移動 (元のロジックを維持)
     if (isNaN(scoreA)) return 1;
     if (isNaN(scoreB)) return -1;
@@ -140,20 +138,20 @@ function getTopRanking(data, scoreColumnNum, nameColumnNum, topN) {
  */
 function calculateRank(targetScoreParam, data, scoreColumnNum) {
   const targetScore = parseFloat(targetScoreParam);
-  
+
   if (isNaN(targetScore)) {
-    return createJsonResponse({ error: "Invalid score parameter. Must be a number." });
+    return createStatusResponse(STATUS.Error, "Invalid score parameter. Must be a number.");
   }
 
   // データがない場合、1位を返す
   if (data.length === 0) {
     return createJsonResponse({ score: targetScore, rank: 1 });
   }
-  
+
   // 'Score'列の数値データだけを抽出
   const allScores = data.map(row => parseFloat(row[scoreColumnNum]))
                         .filter(score => !isNaN(score));
-  
+
   // 自分より高いスコアの数を数える
   let higherScoresCount = 0;
   for (const score of allScores) {
@@ -161,7 +159,7 @@ function calculateRank(targetScoreParam, data, scoreColumnNum) {
       higherScoresCount++;
     }
   }
-  
+
   // 順位 = (自分より高いスコアの数) + 1
   const rank = higherScoresCount + 1;
 
