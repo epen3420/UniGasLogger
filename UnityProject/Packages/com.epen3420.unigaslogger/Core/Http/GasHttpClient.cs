@@ -66,18 +66,18 @@ namespace UniGasLogger.Core
                 })
             );
 
-            using UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl);
-            var operation = webRequest.SendWebRequest();
+            using UnityWebRequest www = UnityWebRequest.Get(fullUrl);
+            var operation = www.SendWebRequest();
 
             while (!operation.isDone)
             {
                 await Task.Yield();
             }
 
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                string responseText = webRequest.downloadHandler.text;
-                string errorMessage = $"Error: {webRequest.error}. Response: {responseText}";
+                string responseText = www.downloadHandler.text;
+                string errorMessage = $"Error: {www.error}. Response: {responseText}";
 
                 // GASからのエラー応答（JSON）をパースし、詳細なエラーをログに出力
                 try
@@ -95,7 +95,7 @@ namespace UniGasLogger.Core
             }
             else
             {
-                string jsonResponse = webRequest.downloadHandler.text;
+                string jsonResponse = www.downloadHandler.text;
                 Debug.Log($"GAS Response: {jsonResponse}");
 
                 T response = JsonUtility.FromJson<T>(jsonResponse);
@@ -104,5 +104,4 @@ namespace UniGasLogger.Core
         }
     }
 
-}
 }
