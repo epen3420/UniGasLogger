@@ -34,9 +34,9 @@ Thumbs.db
 **/*.VC.db
 
 # --- UPM Package Specific ---
-!*.meta
+**/*.meta
 
-/*.meta
+!UnityProject/**/*.meta
 
 # UniGasLogger Settings
 **/GasSettings.asset
