@@ -38,18 +38,17 @@ function doPost(e) {
     });
 
     targetSheet.appendRow(rowToAppend);
-
-    const output = ContentService.createTextOutput('Completed append to spread sheet');
-    return output.setMimeType(ContentService.MimeType.TEXT);
   }
   catch (error) {
     console.log('Exception Error: ' + error.stack);
-    const output = ContentService.createTextOutput('Error: ' + error.message);
-    return output.setMimeType(ContentService.MimeType.TEXT);
+    return createStatusResponse(STATUS.Error, `Error: ${error.message}`)
   }
   finally {
-    lock.releaseLock();
+    if (lock != null)
+      lock.releaseLock();
   }
+
+  return createStatusResponse(STATUS.Success, 'Completed append to spread sheet');
 }
 
 function determineTargetSheet(spreadsheet, sheetName, expectedHeader) {

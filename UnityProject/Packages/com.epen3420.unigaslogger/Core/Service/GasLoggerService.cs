@@ -97,7 +97,7 @@ namespace UniGasLogger.Core
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Log send failed with exception: {e.Message}");
+                Debug.LogError($"[Failed to send log: UniGasLogger] {e.Message}");
             }
         }
     }

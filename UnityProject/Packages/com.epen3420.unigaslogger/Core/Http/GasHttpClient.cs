@@ -32,13 +32,17 @@ namespace UniGasLogger.Core
                 await Task.Yield();
             }
 
-            if (www.result != UnityWebRequest.Result.Success)
+            string responseText = www.downloadHandler.text;
+            StatusResponse response = JsonUtility.FromJson<StatusResponse>(responseText);
+
+            if (www.result == UnityWebRequest.Result.Success &&
+                response.GetStatus() == Status.success)
             {
-                throw new System.Exception($"Failed to send log: {www.error} (Response: {www.downloadHandler.text})");
+                Debug.Log($"[Success to send log: UniGasLogger]: {response.message}");
             }
             else
             {
-                Debug.Log($"Success to send log: {www.downloadHandler.text}");
+                throw new System.Exception($"{response.message}");
             }
         }
 

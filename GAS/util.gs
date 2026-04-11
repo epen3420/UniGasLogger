@@ -103,6 +103,16 @@ function getHeader(sheet){
           : [];
 }
 
+const STATUS = Object.freeze({
+  Success: 'success',
+  Warning: 'warning',
+  Error: 'error'
+});
+
+function createStatusResponse(status, message){
+  return createJsonResponse({"status": status, "message": message});
+}
+
 /**
  * オブジェクトをJSON文字列に変換し、ContentServiceで返すヘルパー関数
  * @param {Object} obj - JSONに変換するオブジェクト
